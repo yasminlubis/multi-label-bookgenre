@@ -93,29 +93,28 @@ def set_test_data(source_folder, test_folder):
     return labelset
     
     
+def main():
+    dir_address = 'raw-test/fantasy_general/'
+
+    header={
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36',
+        'Accept-Encoding': '*',
+        'Connection': 'keep-alive'
+    }
+
+    year = ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021']
+
+    for i in year:
+        html = 'https://www.fictiondb.com/search/searchresults.php?author=&title=&series=&isbn=&datepublished='+i+'&synopsis=&rating=-&anthology=&imprint=0&pubgroup=0&srchtxt=multi&styp=6&GN9001N=on&GN2044N=on&GN2004N=on&GN2042N=on&GN2008Y=on&GN2009N=on&GN2040N=on&GN2014N=on&GN2015N=on&GN2016N=on&GN2019Y=on&GN2022N=on&GN2023N=on&GN2006N=on&GN3129N=on&GN1007N=on&GN1006N=on&GN1004N=on&GN1008N=on&ltyp=1'
+        request = requests.get(html, headers=header)
+        webpage = request.text
+
+        bs = BeautifulSoup(webpage, 'html.parser')
+        scraping(bs, dir_address, header)
+
+    list_dir = sorted(list(paths.list_images('raw-test')))
+    random.shuffle(list_dir)
+
+    y = set_test_data(list_dir, 'test/')
     
-# Main starts from here   
-dir_address = 'raw-test/fantasy_general/'
-
-header={
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36',
-    'Accept-Encoding': '*',
-    'Connection': 'keep-alive'
-}
-
-year = ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021']
-
-for i in year:
-    html = 'https://www.fictiondb.com/search/searchresults.php?author=&title=&series=&isbn=&datepublished='+i+'&synopsis=&rating=-&anthology=&imprint=0&pubgroup=0&srchtxt=multi&styp=6&GN9001N=on&GN2044N=on&GN2004N=on&GN2042N=on&GN2008Y=on&GN2009N=on&GN2040N=on&GN2014N=on&GN2015N=on&GN2016N=on&GN2019Y=on&GN2022N=on&GN2023N=on&GN2006N=on&GN3129N=on&GN1007N=on&GN1006N=on&GN1004N=on&GN1008N=on&ltyp=1'
-    request = requests.get(html, headers=header)
-    webpage = request.text
-    
-    bs = BeautifulSoup(webpage, 'html.parser')
-    scraping(bs, dir_address, header)
-    
- 
-# 
-list_dir = sorted(list(paths.list_images('raw-test')))
-random.shuffle(list_dir)
-
-y = set_test_data(list_dir, 'test/')
+main()
